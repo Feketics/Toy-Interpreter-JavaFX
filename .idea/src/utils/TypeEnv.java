@@ -1,16 +1,16 @@
 package utils;
 
 import exceptions.VariableNotDeclaredException;
+import model.type.Type;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-public class FileTable<K, V> implements IFileTable<K, V>
+public class TypeEnv<K, V extends Type> implements ITypeEnv<K, V>
 {
     private Map<K, V> map;
 
-    public FileTable()
+    public TypeEnv()
     {
         this.map = new HashMap<K, V>();
     }
@@ -28,13 +28,7 @@ public class FileTable<K, V> implements IFileTable<K, V>
     }
 
     @Override
-    public void delete(K key)
-    {
-        this.map.remove(key);
-    }
-
-    @Override
-    public V LookUp(K key) throws VariableNotDeclaredException
+    public V lookUp(K key) throws VariableNotDeclaredException
     {
         if(!this.map.containsKey(key))
             throw new VariableNotDeclaredException("Key " + key + " not found");
@@ -48,15 +42,14 @@ public class FileTable<K, V> implements IFileTable<K, V>
     }
 
     @Override
-    public Set<K> keys()
+    public ITypeEnv<K, V> deepCopy()
     {
-        return this.map.keySet();
-    }
+        ITypeEnv<K, V> newTable = new TypeEnv<>();
 
-    @Override
-    public Map<K, V> getContent()
-    {
-        return this.map;
+        for(K key : this.map.keySet())
+            newTable.put(key, (V)(this.lookUp(key).deepCopy()));
+
+        return newTable;
     }
 
     @Override

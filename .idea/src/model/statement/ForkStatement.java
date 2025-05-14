@@ -17,7 +17,7 @@ public class ForkStatement implements Statement
     @Override
     public ProgramState execute(ProgramState state)
     {
-        return new ProgramState(new ExecutionStack<>(), state.getSymtbl().deepCopy(), state.getOutput(), state.getFileTable(), state.getHeap(), state.getSemaphoreTable(), this.statement);
+        return new ProgramState(new ExecutionStack<>(), state.getSymtbl().deepCopy(), state.getOutput(), state.getFileTable(), state.getHeap(), this.statement);
     }
 
     @Override

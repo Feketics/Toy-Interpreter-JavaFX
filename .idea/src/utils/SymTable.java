@@ -1,16 +1,17 @@
 package utils;
 
 import exceptions.VariableNotDeclaredException;
+import model.value.Value;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class FileTable<K, V> implements IFileTable<K, V>
+public class SymTable<K, V extends Value> implements ISymTable<K, V>
 {
     private Map<K, V> map;
 
-    public FileTable()
+    public SymTable()
     {
         this.map = new HashMap<K, V>();
     }
@@ -34,7 +35,7 @@ public class FileTable<K, V> implements IFileTable<K, V>
     }
 
     @Override
-    public V LookUp(K key) throws VariableNotDeclaredException
+    public V lookUp(K key) throws VariableNotDeclaredException
     {
         if(!this.map.containsKey(key))
             throw new VariableNotDeclaredException("Key " + key + " not found");
@@ -57,6 +58,17 @@ public class FileTable<K, V> implements IFileTable<K, V>
     public Map<K, V> getContent()
     {
         return this.map;
+    }
+
+    @Override
+    public ISymTable<K, V> deepCopy()
+    {
+        ISymTable<K, V> newTable = new SymTable<>();
+
+        for(K key : this.map.keySet())
+            newTable.put(key, (V)(this.lookUp(key).deepCopy()));
+
+        return newTable;
     }
 
     @Override

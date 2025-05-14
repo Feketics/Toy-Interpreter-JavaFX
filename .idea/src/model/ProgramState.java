@@ -1,14 +1,12 @@
 package model;
 
 import exceptions.ExecStackEmptyException;
-import javafx.util.Pair;
 import model.statement.Statement;
 import model.value.StringValue;
 import model.value.Value;
 import utils.*;
 
 import java.io.BufferedReader;
-import java.util.List;
 
 public class ProgramState
 {
@@ -25,7 +23,6 @@ public class ProgramState
     private IOutput<Value> output;
     private IFileTable<StringValue, BufferedReader> fileTable;
     private IHeap<Integer, Value> heap;
-    private ISemaphoreTable<Integer, Pair<Integer, List<Integer>>> semaphoreTable;
     private Statement originalProgram;
 
     public ISymTable<String, Value> getSymtbl()
@@ -48,7 +45,7 @@ public class ProgramState
         return fileTable;
     }
 
-    public ProgramState(IExecutionStack<Statement> execstack, ISymTable<String, Value> symtbl, IOutput<Value> output, IFileTable<StringValue, BufferedReader> fileTable, IHeap<Integer, Value> heap, ISemaphoreTable<Integer, Pair<Integer, List<Integer>>> semaphoreTable, Statement prg)
+    public ProgramState(IExecutionStack<Statement> execstack, ISymTable<String, Value> symtbl, IOutput<Value> output, IFileTable<StringValue, BufferedReader> fileTable, IHeap<Integer, Value> heap, Statement prg)
     {
         this.id = getFreeID();
         this.symtbl = symtbl;
@@ -56,7 +53,6 @@ public class ProgramState
         this.output = output;
         this.fileTable = fileTable;
         this.heap = heap;
-        this.semaphoreTable = semaphoreTable;
         this.originalProgram = prg.deepCopy();
 
         this.execstack.push(prg);
@@ -80,8 +76,7 @@ public class ProgramState
     public String toString()
     {
         return "Program ID: " + this.id + "\nExecstack: " + this.execstack.getReversed().toString() + "\nOutput: " + this.output.toString()
-                + "\nSymtbl: " + this.symtbl.toString() + "\nFileTable: " + this.fileTable.toString() + "\nHeap: " + this.heap.toString() +
-                "\nSemaphoreTable: " + this.semaphoreTable.toString() + "\n";
+                + "\nSymtbl: " + this.symtbl.toString() + "\nFileTable: " + this.fileTable.toString() + "\nHeap: " + this.heap.toString() + "\n";
     }
 
     public Statement getOriginalProgram()
@@ -127,13 +122,5 @@ public class ProgramState
     public int getId()
     {
         return id;
-    }
-
-    public ISemaphoreTable<Integer, Pair<Integer, List<Integer>>> getSemaphoreTable() {
-        return semaphoreTable;
-    }
-
-    public void setSemaphoreTable(ISemaphoreTable<Integer, Pair<Integer, List<Integer>>> semaphoreTable) {
-        this.semaphoreTable = semaphoreTable;
     }
 }

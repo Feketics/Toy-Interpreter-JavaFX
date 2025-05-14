@@ -1,7 +1,6 @@
 package repository;
 
 import exceptions.LogFileException;
-import javafx.util.Pair;
 import model.ProgramState;
 import model.statement.CompStatement;
 import model.statement.Statement;
@@ -99,13 +98,6 @@ public class Repository implements IRepository
             for(Integer i : heap.keys())
             {
                 logfile.println(i.toString() + " --> " + heap.LookUp(i).toString());
-            }
-
-            logfile.println("\nSemaphore Table:\n");
-            ISemaphoreTable<Integer, Pair<Integer, List<Integer>>> semTable = prog.getSemaphoreTable();
-            for(Integer i : semTable.keys())
-            {
-                logfile.println(i.toString() + ": " + semTable.LookUp(i).toString());
             }
 
             logfile.println("\n_____________________________\n");
